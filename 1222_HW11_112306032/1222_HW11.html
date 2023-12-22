@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roll Simulator</title>
+    <style>
+        .dice-row {
+            display: flex;
+        }
+
+        .dice {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<form action="#">
+    <input id="rollButton" type="button" value="Roll Dice" onclick="rollDice()">
+</form>
+
+<div class="dice-row" id="row1">
+    <img class="dice" id="die1" src="die1.png" alt="blank image">
+    <img class="dice" id="die2" src="die2.png" alt="blank image">
+    <img class="dice" id="die3" src="die3.png" alt="blank image">
+    <img class="dice" id="die4" src="die4.png" alt="blank image">
+    <img class="dice" id="die5" src="die5.png" alt="blank image">
+    <img class="dice" id="die6" src="die6.png" alt="blank image">
+</div>
+
+<div class="dice-row" id="row2">
+    <img class="dice" id="die7" src="die1.png" alt="blank image">
+    <img class="dice" id="die8" src="die2.png" alt="blank image">
+    <img class="dice" id="die9" src="die3.png" alt="blank image">
+    <img class="dice" id="die10" src="die4.png" alt="blank image">
+    <img class="dice" id="die11" src="die5.png" alt="blank image">
+    <img class="dice" id="die12" src="die6.png" alt="blank image">
+</div>
+
+<div id="frequencyTable">
+    <h2>Frequency Table</h2>
+    <table border="1">
+        <tr>
+            <th>Face</th>
+            <th>Percentage</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td id="face1Percentage">0%</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td id="face2Percentage">0%</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td id="face3Percentage">0%</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td id="face4Percentage">0%</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td id="face5Percentage">0%</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td id="face6Percentage">0%</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function start() {
+        var button = document.getElementById("rollButton");
+        button.addEventListener("click", rollDice, false);
+    }
+
+    function rollDice() {
+        for (var i = 0; i < 12; i++) {
+            var dieNumber = i + 1;
+            var face = Math.floor(1 + Math.random() * 6);
+            setImage(dieNumber, face);
+        }
+        updateFrequencyTable();
+    }
+
+    function setImage(dieNumber, face) {
+        var dieImg = document.getElementById("die" + dieNumber);
+        dieImg.setAttribute("src", "die" + face + ".png");
+        dieImg.setAttribute("alt", "die image with " + face + " spot(s)");
+    }
+
+    function updateFrequencyTable() {
+        var faceCounts = [0, 0, 0, 0, 0, 0];
+        for (var i = 1; i <= 12; i++) {
+            var dieImg = document.getElementById("die" + i);
+            var face = parseInt(dieImg.alt.match(/\d+/)[0]); // Extract face value from alt attribute
+            faceCounts[face - 1]++;
+        }
+
+        var totalRolls = 12; // Update this if the number of rolls changes
+        for (var j = 1; j <= 6; j++) {
+            var percentageCell = document.getElementById("face" + j + "Percentage");
+            var percentage = ((faceCounts[j - 1] / totalRolls) * 100).toFixed(2) + "%";
+            percentageCell.textContent = percentage;
+        }
+    }
+
+    window.addEventListener("load", start, false);
+</script>
+
+</body>
+</html>
